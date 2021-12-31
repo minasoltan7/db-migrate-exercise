@@ -2,15 +2,15 @@
     "dev": {
       "driver": "pg",
       "host": "127.0.0.1",
-      "database": "db_migrate",
-      "user": "postgres",
-      "password": "1234"
+      "database": "shopping",
+      "user": "shopping_user",
+      "password": "password123"
     },
     "test": {
         "driver": "pg",
         "host": "127.0.0.1",
-        "database": "db_migrate",
-        "user": "postgres",
-        "password": "1234"
+        "database": "shopping_test",
+        "user": "shopping_user",
+        "password": "password123"
       }
   }

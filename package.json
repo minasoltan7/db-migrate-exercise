@@ -9,11 +9,18 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-prettier": "^4.0.0"
+    "eslint-plugin-prettier": "^4.0.0",
+    "jasmine-ts": "^0.4.0",
+    "nodemon": "^2.0.15",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.4.0"
   },
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "test": "npx tsc && jasmine"
+    "migrate": "db-migrate --env test up && db-migrate up",
+    "test": "set ENV=test&& db-migrate --env test up &&jasmine-ts && db-migrate db:drop test",
+    "build": "npx tsc",
+    "start": "rimraf build &&  npm run build && nodemon ./build/models/book --watch src/ "
   },
   "dependencies": {
     "db-migrate": "^0.11.13",
@@ -21,6 +28,7 @@
     "dotenv": "^10.0.0",
     "jasmine": "^3.10.0",
     "jasmine-spec-reporter": "^7.0.0",
+    "node": "^17.3.0",
     "pg": "^8.7.1",
     "supertest": "^6.1.6"
   }
