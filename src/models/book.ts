@@ -69,8 +69,5 @@ export class BookModel {
         }
     }
 }
-const my_book=new BookModel()
 
 
-console.log(process.env.ENV)
-console.log(Client)
