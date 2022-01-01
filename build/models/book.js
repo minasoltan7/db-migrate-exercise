@@ -81,7 +81,7 @@ var BookModel = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'SELECT * FROM books WITH id=(1$)';
+                        sql = 'SELECT * FROM books WHERE id=($1)';
                         return [4 /*yield*/, conn.query(sql, [id])];
                     case 2:
                         result = _a.sent();
@@ -106,8 +106,8 @@ var BookModel = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'INSERT INTO books (title,total_pages,author,summary)VALUES($1,$2,$3,$4)';
-                        return [4 /*yield*/, conn.query(sql, [b.title, b.author, b.total_pages, b.summary])];
+                        sql = 'INSERT INTO books (title,total_pages,author,type,summary)VALUES($1,$2,$3,$4,$5)';
+                        return [4 /*yield*/, conn.query(sql, [b.title, b.total_pages, b.author, b.type, b.summary])];
                     case 2:
                         result = _a.sent();
                         conn.release();
@@ -121,7 +121,7 @@ var BookModel = /** @class */ (function () {
             });
         });
     };
-    BookModel.prototype.delete = function (id) {
+    BookModel.prototype.destroy = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, err_4;
             return __generator(this, function (_a) {
@@ -131,7 +131,7 @@ var BookModel = /** @class */ (function () {
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'DELETE FROM book WHERE id=($1)';
+                        sql = 'DELETE FROM books WHERE id=($1)';
                         return [4 /*yield*/, conn.query(sql, [id])];
                     case 2:
                         result = _a.sent();
@@ -148,6 +148,3 @@ var BookModel = /** @class */ (function () {
     return BookModel;
 }());
 exports.BookModel = BookModel;
-var my_book = new BookModel();
-console.log(process.env.ENV);
-console.log(database_1.default);

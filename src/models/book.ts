@@ -1,10 +1,10 @@
 import Client from "../database";
 
 export type Book= {
-    id:number,
+    readonly id?:number,
     title:string,
-    author:string,
     total_pages:number,
+    author:string,
     type:string
     summary:string,
 }
@@ -30,7 +30,7 @@ export class BookModel {
 
             const conn=await Client.connect();
             // the $1 refer to the first argument in the array of argument(s) we pass in the .query() method in line 28
-            const sql='SELECT * FROM books WITH id=(1$)';
+            const sql='SELECT * FROM books WHERE id=($1)';
             const result =await conn.query(sql,[id]);
             conn.release();
             // returning first row in the book table
@@ -44,8 +44,8 @@ export class BookModel {
 
             const conn=await Client.connect();
             // the $1,$2,$3,$4,$5 refer to the arguments number in the array of argument(s) we pass in the .query() method in line 28
-            const sql='INSERT INTO books (title,total_pages,author,summary)VALUES($1,$2,$3,$4)';
-            const result =await conn.query(sql,[b.title,b.author,b.total_pages,b.summary]);
+            const sql='INSERT INTO books (title,total_pages,author,type,summary)VALUES($1,$2,$3,$4,$5)';
+            const result =await conn.query(sql,[b.title,b.total_pages,b.author,b.type,b.summary]);
             conn.release();
             // returning the row of the book we created
             return result.rows[0]
@@ -54,7 +54,7 @@ export class BookModel {
     
         }
     }
-    async delete(id:number):Promise <Book[]>{
+    async destroy(id:number):Promise <Book[]>{
         try{
 
             const conn=await Client.connect();
@@ -62,7 +62,7 @@ export class BookModel {
             const sql='DELETE FROM book WHERE id=($1)';
             const result =await conn.query(sql,[id]);
             conn.release();
-            return result.rows[0]
+            return result.rows
         }catch(err){
             throw new Error(`Can't delete Book with id=${id}. Error ${err}`)
     
