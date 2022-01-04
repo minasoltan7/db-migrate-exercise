@@ -1,5 +1,6 @@
 import express,{Request,Response} from "express";
 import { Book, BookModel } from "../models/book";
+import jwt from "jsonwebtoken"
 
 const books_library = new BookModel()
 
@@ -29,6 +30,18 @@ const show= async(req:express.Request,res:express.Response)=>{
 }
 
 const create =async(req:express.Request,res:express.Response)=>{
+// Validating User token 
+    try{
+        const authorizationHeader:unknown=req.headers.authorization;
+        const token=(authorizationHeader as string).split(" ")[1]
+        jwt.verify(token,process.env.TOKEN_SECRET as string)
+    }catch(err){
+        res.status(401)
+        res.json("Access denied ,invalid Token ")
+        // we must use "return " to exit the function when the token is not valid
+        return
+    }
+
     try{
 
         const book_spec:Book={
@@ -46,6 +59,19 @@ const create =async(req:express.Request,res:express.Response)=>{
 }
 
 const destroy =async(req:express.Request,res:express.Response)=>{
+    // Validatin user token
+    try{
+        const authorizationHeader:unknown=req.headers.authorization;
+        const token=(authorizationHeader as string).split(" ")[1];
+        jwt.verify(token,process.env.TOKEN_SECRET as string)
+        
+    }catch(err){
+        res.status(401)
+        res.json("Access denied . Token is invalid")
+        // we must use "return " to exit the function when the token is not valid
+        return
+    }
+
     try{
         const id=parseInt(req.params.id);
         const deleted_book =await books_library.destroy(id)

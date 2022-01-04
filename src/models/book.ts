@@ -44,10 +44,12 @@ export class BookModel {
 
             const conn=await Client.connect();
             // the $1,$2,$3,$4,$5 refer to the arguments number in the array of argument(s) we pass in the .query() method in line 28
-            const sql='INSERT INTO books (title,total_pages,author,type,summary)VALUES($1,$2,$3,$4,$5)';
+            // The RETURNING keyword in PostgreSQL gives an opportunity to return from the insert or update statement the values of any columns after the insert or update was run. 
+            const sql='INSERT INTO books (title,total_pages,author,type,summary)VALUES($1,$2,$3,$4,$5) RETURNING *';
             const result =await conn.query(sql,[b.title,b.total_pages,b.author,b.type,b.summary]);
             conn.release();
             // returning the row of the book we created
+            console.log(result.rows[0])
             return result.rows[0]
         }catch(err){
             throw new Error(`Can't create new Book. Error ${err}`)
@@ -59,10 +61,12 @@ export class BookModel {
 
             const conn=await Client.connect();
             // the $1, refer to the first argument in the array of argument(s) we pass in the .query() method in line 28
-            const sql='DELETE FROM book WHERE id=($1)';
+            // The RETURNING keyword in PostgreSQL gives an opportunity to return from the insert or update statement the values of any columns after the insert or update was run. 
+            const sql='DELETE FROM books WHERE id=($1) RETURNING *';
             const result =await conn.query(sql,[id]);
             conn.release();
-            return result.rows
+            console.log(result.rows[0])
+            return result.rows[0]
         }catch(err){
             throw new Error(`Can't delete Book with id=${id}. Error ${err}`)
     
